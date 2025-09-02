@@ -1,23 +1,34 @@
 const { users } = require('../model/userModel');
+const { transfers } = require('../model/transferModel');
 
-exports.transfer = (req, res) => {
-  const { from, to, amount } = req.body;
-  if (!from || !to || typeof amount !== 'number') {
-    return res.status(400).json({ message: 'From, to, and amount are required.' });
-  }
+function transfer({ from, to, value }) {
   const sender = users.find(u => u.username === from);
   const recipient = users.find(u => u.username === to);
   if (!sender || !recipient) {
-    return res.status(404).json({ message: 'Sender or recipient not found.' });
+    const err = new Error('Usuário remetente ou destinatário não encontrado');
+    err.status = 400;
+    throw err;
   }
-  if (sender.balance < amount) {
-    return res.status(400).json({ message: 'Insufficient balance.' });
+  if (sender.saldo < value) {
+    const err = new Error('Saldo insuficiente');
+    err.status = 400;
+    throw err;
   }
-  const isFavorecido = sender.favorecidos.includes(to);
-  if (!isFavorecido && amount >= 5000) {
-    return res.status(403).json({ message: 'Transfer above R$ 5.000,00 only allowed to favorecidos.' });
+  const isFavorecido = sender.favorecidos && sender.favorecidos.includes(to);
+  if (!isFavorecido && value >= 5000) {
+    const err = new Error('Transferência acima de R$ 5.000,00 só para favorecidos');
+    err.status = 400;
+    throw err;
   }
-  sender.balance -= amount;
-  recipient.balance += amount;
-  res.json({ message: 'Transfer successful.' });
-};
+  sender.saldo -= value;
+  recipient.saldo += value;
+  const transfer = { from, to, value, date: new Date().toISOString() };
+  transfers.push(transfer);
+  return transfer;
+}
+
+function listTransfers() {
+  return transfers;
+}
+
+module.exports = { transfer, listTransfers };

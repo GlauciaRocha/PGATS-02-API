@@ -1,3 +1,26 @@
-const users = [];
+const bcrypt = require('bcryptjs');
 
-module.exports = { users };
+// In-memory user database
+const users = [
+  {
+    username: 'julio', 
+    password: bcrypt.hashSync('123456', 8), 
+    favorecidos: [ 'priscila' ], 
+    saldo: 10000
+  },
+  {
+    username: 'priscila', 
+    password: bcrypt.hashSync('123456', 8), 
+    favorecidos: [ 'julio' ], 
+    saldo: 10000
+  }
+];
+
+function resetUsers() {
+  users.length = 0;
+}
+
+module.exports = {
+  users,
+  resetUsers
+};

@@ -1,29 +1,29 @@
 const { users } = require('../model/userModel');
+const bcrypt = require('bcryptjs');
 
-exports.register = (req, res) => {
-  const { username, password, favorecidos = [] } = req.body;
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required.' });
-  }
-  if (users.find(u => u.username === username)) {
-    return res.status(409).json({ message: 'User already exists.' });
-  }
-  users.push({ username, password, favorecidos, balance: 0 });
-  res.status(201).json({ message: 'User registered successfully.' });
-};
+function findUserByUsername(username) {
+  return users.find(u => u.username === username);
+}
 
-exports.login = (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required.' });
+function registerUser({ username, password, favorecidos = [] }) {
+  if (findUserByUsername(username)) {
+    throw new Error('Usuário já existe');
   }
-  const user = users.find(u => u.username === username && u.password === password);
-  if (!user) {
-    return res.status(401).json({ message: 'Invalid credentials.' });
-  }
-  res.json({ message: 'Login successful.' });
-};
+  const hashedPassword = bcrypt.hashSync(password, 8);
+  const user = { username, password: hashedPassword, favorecidos, saldo: 10000 };
+  users.push(user);
+  return { username, favorecidos, saldo: user.saldo };
+}
 
-exports.getAll = (req, res) => {
-  res.json(users.map(u => ({ username: u.username, favorecidos: u.favorecidos, balance: u.balance })));
-};
+function loginUser({ username, password }) {
+  const user = findUserByUsername(username);
+  if (!user) throw new Error('Usuário não encontrado');
+  if (!bcrypt.compareSync(password, user.password)) throw new Error('Senha inválida');
+  return { username: user.username, favorecidos: user.favorecidos, saldo: user.saldo };
+}
+
+function listUsers() {
+  return users.map(u => ({ username: u.username, favorecidos: u.favorecidos, saldo: u.saldo }));
+}
+
+module.exports = { registerUser, loginUser, listUsers, findUserByUsername };
