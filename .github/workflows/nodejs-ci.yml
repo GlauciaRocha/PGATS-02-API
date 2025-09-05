@@ -28,8 +28,15 @@ jobs:
     - name: Subir a API
       run: npm start &
 
-    - name: Esperar a API estar funcionando
-      run: sleep 15
+
+    - name: Esperar a porta 3000 responder
+      run: |
+        for i in {1..30}; do
+          nc -z localhost 3000 && echo "API está pronta!" && exit 0
+          echo "Aguardando a API subir..."
+          sleep 1
+        done
+        echo "A API não subiu a tempo" && exit 1
 
     - name: Rodar os testes de API via HTTP
       run: npm run test-external
