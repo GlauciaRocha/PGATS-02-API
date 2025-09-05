@@ -22,12 +22,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run software tests
-      run: npm run test-controller
-
     - name: Subir a API
       run: npm start &
-
 
     - name: Esperar a porta 3000 responder
       run: |
@@ -37,6 +33,9 @@ jobs:
           sleep 1
         done
         echo "A API não subiu a tempo" && exit 1
+
+    - name: Rodar os testes de controller
+      run: npm run test-controller
 
     - name: Rodar os testes de API via HTTP
       run: npm run test-external
