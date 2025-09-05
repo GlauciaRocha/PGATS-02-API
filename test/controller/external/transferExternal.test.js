@@ -11,6 +11,7 @@ describe('Transfer', () => {
                 .post('/test/reset')
                 .send();
             // Registrar usuário 'julio' antes do login
+            try {
                 const respostaRegistroJulio = await request('http://localhost:3000')
                     .post('/users/register')
                     .send({
@@ -18,9 +19,15 @@ describe('Transfer', () => {
                         password: '123456',
                         favorecidos: ['priscila']
                     });
-                console.log('Registro julio:', respostaRegistroJulio.status, respostaRegistroJulio.body);
+                if (respostaRegistroJulio.status !== 201 && respostaRegistroJulio.status !== 400) {
+                    console.log('Registro julio:', respostaRegistroJulio.status, respostaRegistroJulio.body);
+                }
+            } catch (err) {
+                // Ignora erro de usuário já existente
+            }
 
             // Registrar usuário 'priscila' (destinatário válido)
+            try {
                 const respostaRegistroPriscila = await request('http://localhost:3000')
                     .post('/users/register')
                     .send({
@@ -28,7 +35,12 @@ describe('Transfer', () => {
                         password: '123456',
                         favorecidos: ['julio']
                     });
-                console.log('Registro priscila:', respostaRegistroPriscila.status, respostaRegistroPriscila.body);
+                if (respostaRegistroPriscila.status !== 201 && respostaRegistroPriscila.status !== 400) {
+                    console.log('Registro priscila:', respostaRegistroPriscila.status, respostaRegistroPriscila.body);
+                }
+            } catch (err) {
+                // Ignora erro de usuário já existente
+            }
 
             const respostaLogin = await request('http://localhost:3000')
                 .post('/users/login')
@@ -36,10 +48,10 @@ describe('Transfer', () => {
                     username: 'julio',
                     password: '123456'
                 });
-                console.log('Login julio:', respostaLogin.status, respostaLogin.body);
+            // console.log('Login julio:', respostaLogin.status, respostaLogin.body);
 
             token = respostaLogin.body.token;
-            console.log('Token de login:', token);
+            // console.log('Token de login:', token);
         });
 
         it('Quando informo remetente e destinatario inexistentes recebo 400', async () => {
