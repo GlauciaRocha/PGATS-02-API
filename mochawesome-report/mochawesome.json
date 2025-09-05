@@ -5,9 +5,9 @@
     "passes": 6,
     "pending": 0,
     "failures": 0,
-    "start": "2025-09-04T23:20:10.972Z",
-    "end": "2025-09-04T23:20:11.289Z",
-    "duration": 317,
+    "start": "2025-09-05T01:04:20.179Z",
+    "end": "2025-09-05T01:04:20.443Z",
+    "duration": 264,
     "testsRegistered": 6,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "6dff754d-b875-4216-adbb-91a98466be32",
+      "uuid": "bf207806-dbc7-41a6-a234-e2f5754a22ad",
       "title": "",
       "fullFile": "",
       "file": "",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "073b1fcb-2758-409d-aeeb-ee0a8e65e17a",
+          "uuid": "5b4969c7-7ed1-4b4f-b4ce-7b869156617e",
           "title": "Transfer",
           "fullFile": "C:\\Users\\glaucia.rocha\\Desktop\\PGATS-02-API\\test\\controller\\external\\transferExternal.test.js",
           "file": "\\test\\controller\\external\\transferExternal.test.js",
@@ -36,7 +36,7 @@
           "tests": [],
           "suites": [
             {
-              "uuid": "c4899ab2-fd63-4f0d-b76f-3030fe097385",
+              "uuid": "39392962-88bd-4c68-b5ad-dff5080d2a07",
               "title": "POST /transfers",
               "fullFile": "C:\\Users\\glaucia.rocha\\Desktop\\PGATS-02-API\\test\\controller\\external\\transferExternal.test.js",
               "file": "\\test\\controller\\external\\transferExternal.test.js",
@@ -45,17 +45,17 @@
                   "title": "\"before each\" hook in \"POST /transfers\"",
                   "fullTitle": "Transfer POST /transfers \"before each\" hook in \"POST /transfers\"",
                   "timedOut": false,
-                  "duration": 35,
+                  "duration": 30,
                   "state": null,
                   "speed": null,
                   "pass": false,
                   "fail": false,
                   "pending": false,
                   "context": null,
-                  "code": "// Limpar dados no servidor real antes de cada teste\nawait request('http://localhost:3000')\n    .post('/test/reset')\n    .send();\n// Registrar usuário 'julio' antes do login\n    const respostaRegistroJulio = await request('http://localhost:3000')\n        .post('/users/register')\n        .send({\n            username: 'julio',\n            password: '123456',\n            favorecidos: ['priscila']\n        });\n    console.log('Registro julio:', respostaRegistroJulio.status, respostaRegistroJulio.body);\n// Registrar usuário 'priscila' (destinatário válido)\n    const respostaRegistroPriscila = await request('http://localhost:3000')\n        .post('/users/register')\n        .send({\n            username: 'priscila',\n            password: '123456',\n            favorecidos: ['julio']\n        });\n    console.log('Registro priscila:', respostaRegistroPriscila.status, respostaRegistroPriscila.body);\nconst respostaLogin = await request('http://localhost:3000')\n    .post('/users/login')\n    .send({\n        username: 'julio',\n        password: '123456'\n    });\n    console.log('Login julio:', respostaLogin.status, respostaLogin.body);\ntoken = respostaLogin.body.token;\nconsole.log('Token de login:', token);",
+                  "code": "// Limpar dados no servidor real antes de cada teste\nawait request('http://localhost:3000')\n    .post('/test/reset')\n    .send();\n// Registrar usuário 'julio' antes do login\ntry {\n    const respostaRegistroJulio = await request('http://localhost:3000')\n        .post('/users/register')\n        .send({\n            username: 'julio',\n            password: '123456',\n            favorecidos: ['priscila']\n        });\n    if (respostaRegistroJulio.status !== 201 && respostaRegistroJulio.status !== 400) {\n        console.log('Registro julio:', respostaRegistroJulio.status, respostaRegistroJulio.body);\n    }\n} catch (err) {\n    // Ignora erro de usuário já existente\n}\n// Registrar usuário 'priscila' (destinatário válido)\ntry {\n    const respostaRegistroPriscila = await request('http://localhost:3000')\n        .post('/users/register')\n        .send({\n            username: 'priscila',\n            password: '123456',\n            favorecidos: ['julio']\n        });\n    if (respostaRegistroPriscila.status !== 201 && respostaRegistroPriscila.status !== 400) {\n        console.log('Registro priscila:', respostaRegistroPriscila.status, respostaRegistroPriscila.body);\n    }\n} catch (err) {\n    // Ignora erro de usuário já existente\n}\nconst respostaLogin = await request('http://localhost:3000')\n    .post('/users/login')\n    .send({\n        username: 'julio',\n        password: '123456'\n    });\n// console.log('Login julio:', respostaLogin.status, respostaLogin.body);\ntoken = respostaLogin.body.token;\n// console.log('Token de login:', token);",
                   "err": {},
-                  "uuid": "34f19729-4b79-428c-a80a-9bc6d2b44e6e",
-                  "parentUUID": "c4899ab2-fd63-4f0d-b76f-3030fe097385",
+                  "uuid": "6de30b53-7d82-4eb1-ad0f-86905bb8b92c",
+                  "parentUUID": "39392962-88bd-4c68-b5ad-dff5080d2a07",
                   "isHook": true,
                   "skipped": false
                 }
@@ -75,8 +75,8 @@
                   "context": null,
                   "code": "const resposta = await request('http://localhost:3000')\n    .post('/transfers')\n    .set('Authorization', `Bearer ${token}`)\n    .send({\n        from: \"julio\",\n        to: \"isabelle\",\n        value: 100\n    });\nconsole.log('Resposta transferência (remetente/destinatário inexistentes):', resposta.status, resposta.body);\nexpect(resposta.status).to.equal(400);\nexpect(resposta.body).to.have.property('error', 'Usuário remetente ou destinatário não encontrado')",
                   "err": {},
-                  "uuid": "c20dab2a-db80-45c5-a293-ee1f12e7f6da",
-                  "parentUUID": "c4899ab2-fd63-4f0d-b76f-3030fe097385",
+                  "uuid": "8dd7fe85-1b30-4339-908b-66758d3223bb",
+                  "parentUUID": "39392962-88bd-4c68-b5ad-dff5080d2a07",
                   "isHook": false,
                   "skipped": false
                 },
@@ -93,8 +93,8 @@
                   "context": null,
                   "code": "const resposta = await request(\"http://localhost:3000\")\n    .post('/transfers')\n    .set('Authorization', `Bearer ${token}`)\n    .send({\n        from: \"jose\",\n        to: \"isabelle\",\n        value: 100\n    });\nconsole.log('Resposta transferência (mocks remetente/destinatário inexistentes):', resposta.status, resposta.body);\nexpect(resposta.status).to.equal(400);\nexpect(resposta.body).to.have.property('error', 'Usuário remetente ou destinatário não encontrado');",
                   "err": {},
-                  "uuid": "4c99570f-479f-4bdb-8efd-dc0a5451ba6e",
-                  "parentUUID": "c4899ab2-fd63-4f0d-b76f-3030fe097385",
+                  "uuid": "092576c9-ca2f-4026-867e-6ba4b8fbf8ca",
+                  "parentUUID": "39392962-88bd-4c68-b5ad-dff5080d2a07",
                   "isHook": false,
                   "skipped": false
                 },
@@ -102,7 +102,7 @@
                   "title": "Usando Mocks: Quando informo valores válidos eu tenho sucesso com 201 CREATED",
                   "fullTitle": "Transfer POST /transfers Usando Mocks: Quando informo valores válidos eu tenho sucesso com 201 CREATED",
                   "timedOut": false,
-                  "duration": 7,
+                  "duration": 5,
                   "state": "passed",
                   "speed": "fast",
                   "pass": true,
@@ -111,22 +111,22 @@
                   "context": null,
                   "code": "const resposta = await request('http://localhost:3000')\n    .post('/transfers')\n    .set('Authorization', `Bearer ${token}`)\n    .send({\n        from: \"julio\",\n        to: \"priscila\",\n        value: 100\n    });\nconsole.log('Resposta transferência (valores válidos):', resposta.status, resposta.body);\nexpect(resposta.status).to.equal(201);\n// Validação com um Fixture\nconst respostaEsperada = require('../fixture/respostas/quandoInformoValoresValidosEuTenhoSucessoCom201Created.json')\ndelete resposta.body.date;\ndelete respostaEsperada.date; \nexpect(resposta.body).to.deep.equal(respostaEsperada);",
                   "err": {},
-                  "uuid": "9c93bdda-0ab3-47dd-a538-8b1f839e7dfc",
-                  "parentUUID": "c4899ab2-fd63-4f0d-b76f-3030fe097385",
+                  "uuid": "1302e841-a007-4a34-8fba-964a134d8915",
+                  "parentUUID": "39392962-88bd-4c68-b5ad-dff5080d2a07",
                   "isHook": false,
                   "skipped": false
                 }
               ],
               "suites": [],
               "passes": [
-                "c20dab2a-db80-45c5-a293-ee1f12e7f6da",
-                "4c99570f-479f-4bdb-8efd-dc0a5451ba6e",
-                "9c93bdda-0ab3-47dd-a538-8b1f839e7dfc"
+                "8dd7fe85-1b30-4339-908b-66758d3223bb",
+                "092576c9-ca2f-4026-867e-6ba4b8fbf8ca",
+                "1302e841-a007-4a34-8fba-964a134d8915"
               ],
               "failures": [],
               "pending": [],
               "skipped": [],
-              "duration": 19,
+              "duration": 17,
               "root": false,
               "rootEmpty": false,
               "_timeout": 10000
@@ -142,7 +142,7 @@
           "_timeout": 10000
         },
         {
-          "uuid": "fc899ebd-d537-4173-8f3f-e92090dfbb3b",
+          "uuid": "c1500fab-8901-409a-a82b-ade55cf656ba",
           "title": "Transfer Controller",
           "fullFile": "C:\\Users\\glaucia.rocha\\Desktop\\PGATS-02-API\\test\\controller\\transferController.test.js",
           "file": "\\test\\controller\\transferController.test.js",
@@ -151,7 +151,7 @@
           "tests": [],
           "suites": [
             {
-              "uuid": "72973bd1-817a-4392-a9ac-539acca0455c",
+              "uuid": "c44f13ee-efec-4770-8a6a-cf74badf49df",
               "title": "POST /transfers",
               "fullFile": "C:\\Users\\glaucia.rocha\\Desktop\\PGATS-02-API\\test\\controller\\transferController.test.js",
               "file": "\\test\\controller\\transferController.test.js",
@@ -160,7 +160,7 @@
                   "title": "\"before each\" hook in \"POST /transfers\"",
                   "fullTitle": "Transfer Controller POST /transfers \"before each\" hook in \"POST /transfers\"",
                   "timedOut": false,
-                  "duration": 24,
+                  "duration": 23,
                   "state": null,
                   "speed": null,
                   "pass": false,
@@ -169,8 +169,8 @@
                   "context": null,
                   "code": "const respostaLogin = await request(app)\n    .post('/users/login')\n    .send({\n        username: 'julio',\n        password: '123456'\n    });\ntoken = respostaLogin.body.token;",
                   "err": {},
-                  "uuid": "b2980f45-f875-40c4-bc9f-1369beb97f4f",
-                  "parentUUID": "72973bd1-817a-4392-a9ac-539acca0455c",
+                  "uuid": "bf50e08b-3876-41ed-a813-ae74a9d2669d",
+                  "parentUUID": "c44f13ee-efec-4770-8a6a-cf74badf49df",
                   "isHook": true,
                   "skipped": false
                 }
@@ -189,8 +189,8 @@
                   "context": null,
                   "code": "// Reseto o Mock\nsinon.restore();",
                   "err": {},
-                  "uuid": "6d74bcb1-ab8e-4474-9e91-07d854b448d6",
-                  "parentUUID": "72973bd1-817a-4392-a9ac-539acca0455c",
+                  "uuid": "1e1b8e63-9aaf-426b-9a99-da28d909b850",
+                  "parentUUID": "c44f13ee-efec-4770-8a6a-cf74badf49df",
                   "isHook": true,
                   "skipped": false
                 }
@@ -200,7 +200,7 @@
                   "title": "Quando informo remetente e destinatario inexistentes recebo 400",
                   "fullTitle": "Transfer Controller POST /transfers Quando informo remetente e destinatario inexistentes recebo 400",
                   "timedOut": false,
-                  "duration": 8,
+                  "duration": 5,
                   "state": "passed",
                   "speed": "fast",
                   "pass": true,
@@ -209,8 +209,8 @@
                   "context": null,
                   "code": "const resposta = await request(app)\n    .post('/transfers')\n    .set('Authorization', `Bearer ${token}`)\n    .send({\n        from: \"julio\",\n        to: \"isabelle\",\n        value: 100\n    });\n\nexpect(resposta.status).to.equal(400);\nexpect(resposta.body).to.have.property('error', 'Usuário remetente ou destinatário não encontrado')",
                   "err": {},
-                  "uuid": "a62bae67-f1b4-4389-a9ad-ce2f5e880e13",
-                  "parentUUID": "72973bd1-817a-4392-a9ac-539acca0455c",
+                  "uuid": "8be7f2b8-a726-4b1d-adfc-f3149bdb5823",
+                  "parentUUID": "c44f13ee-efec-4770-8a6a-cf74badf49df",
                   "isHook": false,
                   "skipped": false
                 },
@@ -218,7 +218,7 @@
                   "title": "Usando Mocks: Quando informo remetente e destinatario inexistentes recebo 400",
                   "fullTitle": "Transfer Controller POST /transfers Usando Mocks: Quando informo remetente e destinatario inexistentes recebo 400",
                   "timedOut": false,
-                  "duration": 8,
+                  "duration": 5,
                   "state": "passed",
                   "speed": "fast",
                   "pass": true,
@@ -227,8 +227,8 @@
                   "context": null,
                   "code": "// Mocar apenas a função transfer do Service\nconst transferServiceMock = sinon.stub(transferService, 'transfer');\ntransferServiceMock.throws(new Error('Usuário remetente ou destinatário não encontrado'));\nconst resposta = await request(app)\n    .post('/transfers')\n    .set('Authorization', `Bearer ${token}`)\n    .send({\n        from: \"julio\",\n        to: \"priscila\",\n        value: 100\n    });\n\nexpect(resposta.status).to.equal(400);\nexpect(resposta.body).to.have.property('error', 'Usuário remetente ou destinatário não encontrado');",
                   "err": {},
-                  "uuid": "902f261b-33e2-400a-a304-b024d4369840",
-                  "parentUUID": "72973bd1-817a-4392-a9ac-539acca0455c",
+                  "uuid": "a7c0f042-04b7-427a-81e2-5c7e04901e77",
+                  "parentUUID": "c44f13ee-efec-4770-8a6a-cf74badf49df",
                   "isHook": false,
                   "skipped": false
                 },
@@ -236,7 +236,7 @@
                   "title": "Usando Mocks: Quando informo valores válidos eu tenho sucesso com 201 CREATED",
                   "fullTitle": "Transfer Controller POST /transfers Usando Mocks: Quando informo valores válidos eu tenho sucesso com 201 CREATED",
                   "timedOut": false,
-                  "duration": 6,
+                  "duration": 7,
                   "state": "passed",
                   "speed": "fast",
                   "pass": true,
@@ -245,22 +245,22 @@
                   "context": null,
                   "code": "// Mocar apenas a função transfer do Service\nconst transferServiceMock = sinon.stub(transferService, 'transfer');\ntransferServiceMock.returns({ \n    from: \"julio\", \n    to: \"priscila\", \n    value: 100, \n    date: new Date().toISOString() \n});\nconst resposta = await request(app)\n    .post('/transfers')\n    .set('Authorization', `Bearer ${token}`)\n    .send({\n        from: \"julio\",\n        to: \"priscilaaaaaaaaaaa\",\n        value: 100\n    });\n\nexpect(resposta.status).to.equal(201);\n\n// Validação com um Fixture\nconst respostaEsperada = require('../fixture/respostas/quandoInformoValoresValidosEuTenhoSucessoCom201Created.json')\ndelete resposta.body.date;\ndelete respostaEsperada.date; \nexpect(resposta.body).to.deep.equal(respostaEsperada);\n// Um expect para comparar a Resposta.body com a String contida no arquivo\n// expect(resposta.body).to.have.property('from', 'julio');\n// expect(resposta.body).to.have.property('to', 'priscila');\n// expect(resposta.body).to.have.property('value', 100);",
                   "err": {},
-                  "uuid": "c86e8a6c-a638-4481-a350-85b87075ca87",
-                  "parentUUID": "72973bd1-817a-4392-a9ac-539acca0455c",
+                  "uuid": "b6db9ea7-3b6d-4968-b74c-9f520a663d2c",
+                  "parentUUID": "c44f13ee-efec-4770-8a6a-cf74badf49df",
                   "isHook": false,
                   "skipped": false
                 }
               ],
               "suites": [],
               "passes": [
-                "a62bae67-f1b4-4389-a9ad-ce2f5e880e13",
-                "902f261b-33e2-400a-a304-b024d4369840",
-                "c86e8a6c-a638-4481-a350-85b87075ca87"
+                "8be7f2b8-a726-4b1d-adfc-f3149bdb5823",
+                "a7c0f042-04b7-427a-81e2-5c7e04901e77",
+                "b6db9ea7-3b6d-4968-b74c-9f520a663d2c"
               ],
               "failures": [],
               "pending": [],
               "skipped": [],
-              "duration": 22,
+              "duration": 17,
               "root": false,
               "rootEmpty": false,
               "_timeout": 10000
