@@ -5,9 +5,9 @@
     "passes": 3,
     "pending": 0,
     "failures": 0,
-    "start": "2025-09-05T00:07:27.114Z",
-    "end": "2025-09-05T00:07:27.278Z",
-    "duration": 164,
+    "start": "2025-09-05T00:47:19.108Z",
+    "end": "2025-09-05T00:47:19.268Z",
+    "duration": 160,
     "testsRegistered": 3,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "b1ee8a50-6402-4f8b-9b0e-4df2846fab2c",
+      "uuid": "7a9f14e8-4839-4478-aee5-4527695fdb30",
       "title": "",
       "fullFile": "C:\\Users\\glaucia.rocha\\Desktop\\PGATS-02-API\\test\\controller\\external\\transferExternal.test.js",
       "file": "\\test\\controller\\external\\transferExternal.test.js",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "fbc7f556-2d0a-4e2a-b5e9-1ad4726d4c4b",
+          "uuid": "a37b15c7-bdd6-4084-9111-c7ae7c8274b7",
           "title": "Transfer",
           "fullFile": "C:\\Users\\glaucia.rocha\\Desktop\\PGATS-02-API\\test\\controller\\external\\transferExternal.test.js",
           "file": "\\test\\controller\\external\\transferExternal.test.js",
@@ -36,7 +36,7 @@
           "tests": [],
           "suites": [
             {
-              "uuid": "6e0da23d-5b92-41bd-89b1-7dcda27f0d7c",
+              "uuid": "66f76486-5cb0-41ea-ac3f-c570222bcef2",
               "title": "POST /transfers",
               "fullFile": "C:\\Users\\glaucia.rocha\\Desktop\\PGATS-02-API\\test\\controller\\external\\transferExternal.test.js",
               "file": "\\test\\controller\\external\\transferExternal.test.js",
@@ -45,7 +45,7 @@
                   "title": "\"before each\" hook in \"POST /transfers\"",
                   "fullTitle": "Transfer POST /transfers \"before each\" hook in \"POST /transfers\"",
                   "timedOut": false,
-                  "duration": 33,
+                  "duration": 32,
                   "state": null,
                   "speed": null,
                   "pass": false,
@@ -54,8 +54,8 @@
                   "context": null,
                   "code": "// Limpar dados no servidor real antes de cada teste\nawait request('http://localhost:3000')\n    .post('/test/reset')\n    .send();\n// Registrar usuário 'julio' antes do login\n    const respostaRegistroJulio = await request('http://localhost:3000')\n        .post('/users/register')\n        .send({\n            username: 'julio',\n            password: '123456',\n            favorecidos: ['priscila']\n        });\n    console.log('Registro julio:', respostaRegistroJulio.status, respostaRegistroJulio.body);\n// Registrar usuário 'priscila' (destinatário válido)\n    const respostaRegistroPriscila = await request('http://localhost:3000')\n        .post('/users/register')\n        .send({\n            username: 'priscila',\n            password: '123456',\n            favorecidos: ['julio']\n        });\n    console.log('Registro priscila:', respostaRegistroPriscila.status, respostaRegistroPriscila.body);\nconst respostaLogin = await request('http://localhost:3000')\n    .post('/users/login')\n    .send({\n        username: 'julio',\n        password: '123456'\n    });\n    console.log('Login julio:', respostaLogin.status, respostaLogin.body);\ntoken = respostaLogin.body.token;\nconsole.log('Token de login:', token);",
                   "err": {},
-                  "uuid": "d5f67579-004c-464c-95b4-0e5446a677a2",
-                  "parentUUID": "6e0da23d-5b92-41bd-89b1-7dcda27f0d7c",
+                  "uuid": "609c05ed-4a7d-488f-b2a0-cd401be8f1fc",
+                  "parentUUID": "66f76486-5cb0-41ea-ac3f-c570222bcef2",
                   "isHook": true,
                   "skipped": false
                 }
@@ -66,7 +66,7 @@
                   "title": "Quando informo remetente e destinatario inexistentes recebo 400",
                   "fullTitle": "Transfer POST /transfers Quando informo remetente e destinatario inexistentes recebo 400",
                   "timedOut": false,
-                  "duration": 7,
+                  "duration": 8,
                   "state": "passed",
                   "speed": "fast",
                   "pass": true,
@@ -75,8 +75,8 @@
                   "context": null,
                   "code": "const resposta = await request('http://localhost:3000')\n    .post('/transfers')\n    .set('Authorization', `Bearer ${token}`)\n    .send({\n        from: \"julio\",\n        to: \"isabelle\",\n        value: 100\n    });\nconsole.log('Resposta transferência (remetente/destinatário inexistentes):', resposta.status, resposta.body);\nexpect(resposta.status).to.equal(400);\nexpect(resposta.body).to.have.property('error', 'Usuário remetente ou destinatário não encontrado')",
                   "err": {},
-                  "uuid": "5452021f-e12e-43fc-b3d3-101961bdec32",
-                  "parentUUID": "6e0da23d-5b92-41bd-89b1-7dcda27f0d7c",
+                  "uuid": "32133784-a154-45ad-8766-dd2fa3ae5912",
+                  "parentUUID": "66f76486-5cb0-41ea-ac3f-c570222bcef2",
                   "isHook": false,
                   "skipped": false
                 },
@@ -84,7 +84,7 @@
                   "title": "Usando Mocks: Quando informo remetente e destinatario inexistentes recebo 400",
                   "fullTitle": "Transfer POST /transfers Usando Mocks: Quando informo remetente e destinatario inexistentes recebo 400",
                   "timedOut": false,
-                  "duration": 7,
+                  "duration": 5,
                   "state": "passed",
                   "speed": "fast",
                   "pass": true,
@@ -93,8 +93,8 @@
                   "context": null,
                   "code": "const resposta = await request(\"http://localhost:3000\")\n    .post('/transfers')\n    .set('Authorization', `Bearer ${token}`)\n    .send({\n        from: \"jose\",\n        to: \"isabelle\",\n        value: 100\n    });\nconsole.log('Resposta transferência (mocks remetente/destinatário inexistentes):', resposta.status, resposta.body);\nexpect(resposta.status).to.equal(400);\nexpect(resposta.body).to.have.property('error', 'Usuário remetente ou destinatário não encontrado');",
                   "err": {},
-                  "uuid": "cfabd507-8e77-4266-bb0c-3003a95d2984",
-                  "parentUUID": "6e0da23d-5b92-41bd-89b1-7dcda27f0d7c",
+                  "uuid": "89c14d09-dd47-455e-b90e-83e669ca33df",
+                  "parentUUID": "66f76486-5cb0-41ea-ac3f-c570222bcef2",
                   "isHook": false,
                   "skipped": false
                 },
@@ -111,22 +111,22 @@
                   "context": null,
                   "code": "const resposta = await request('http://localhost:3000')\n    .post('/transfers')\n    .set('Authorization', `Bearer ${token}`)\n    .send({\n        from: \"julio\",\n        to: \"priscila\",\n        value: 100\n    });\nconsole.log('Resposta transferência (valores válidos):', resposta.status, resposta.body);\nexpect(resposta.status).to.equal(201);\n// Validação com um Fixture\nconst respostaEsperada = require('../fixture/respostas/quandoInformoValoresValidosEuTenhoSucessoCom201Created.json')\ndelete resposta.body.date;\ndelete respostaEsperada.date; \nexpect(resposta.body).to.deep.equal(respostaEsperada);",
                   "err": {},
-                  "uuid": "ad4da108-6b3d-4744-ba88-5f776f8d123b",
-                  "parentUUID": "6e0da23d-5b92-41bd-89b1-7dcda27f0d7c",
+                  "uuid": "ee78a81b-4ecb-4f84-959c-eaf12af11ca7",
+                  "parentUUID": "66f76486-5cb0-41ea-ac3f-c570222bcef2",
                   "isHook": false,
                   "skipped": false
                 }
               ],
               "suites": [],
               "passes": [
-                "5452021f-e12e-43fc-b3d3-101961bdec32",
-                "cfabd507-8e77-4266-bb0c-3003a95d2984",
-                "ad4da108-6b3d-4744-ba88-5f776f8d123b"
+                "32133784-a154-45ad-8766-dd2fa3ae5912",
+                "89c14d09-dd47-455e-b90e-83e669ca33df",
+                "ee78a81b-4ecb-4f84-959c-eaf12af11ca7"
               ],
               "failures": [],
               "pending": [],
               "skipped": [],
-              "duration": 20,
+              "duration": 19,
               "root": false,
               "rootEmpty": false,
               "_timeout": 10000
